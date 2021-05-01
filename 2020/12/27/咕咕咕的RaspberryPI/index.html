@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://afgxf.github.io/site/static/media/logo.df768b32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://afgxf.github.io/site/static/media/logo.df768b32.png">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"afgxf.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":"ture","show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="声明非常的对不起大家，最近咕得有点厉害，由于 CSP-J 100pts 历史重演 以及一些其他的考试&#x2F;比赛&#x2F;咕咕咕&#x2F;买树莓派之类的行为，一直没照看Blog，非常抱歉！ 删除了一些SpaceVim的文章.对于这些文章,我认为SpaceVim把Vim&amp;Nvim变成了近似IDE&#x2F;VSCode的存在.这是违背Vim&amp;Nvim设计初衷的.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="咕咕咕的RaspberryPI(一):入门">
+<meta property="og:url" content="https://afgxf.github.io/2020/12/27/%E5%92%95%E5%92%95%E5%92%95%E7%9A%84RaspberryPI/">
+<meta property="og:site_name" content="AFGXF&#39;s Blog">
+<meta property="og:description" content="声明非常的对不起大家，最近咕得有点厉害，由于 CSP-J 100pts 历史重演 以及一些其他的考试&#x2F;比赛&#x2F;咕咕咕&#x2F;买树莓派之类的行为，一直没照看Blog，非常抱歉！ 删除了一些SpaceVim的文章.对于这些文章,我认为SpaceVim把Vim&amp;Nvim变成了近似IDE&#x2F;VSCode的存在.这是违背Vim&amp;Nvim设计初衷的.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shumeipai.nxez.com/wp-content/uploads/2017/03/raspberrypi-version-compare-4b.png">
+<meta property="og:image" content="https://shumeipai.nxez.com/wp-content/uploads/2019/06/20190630222025426.jpg">
+<meta property="article:published_time" content="2020-12-27T12:21:14.000Z">
+<meta property="article:modified_time" content="2020-12-27T12:59:01.179Z">
+<meta property="article:author" content="AFGXF">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Raspberry PI">
+<meta property="article:tag" content="树莓派">
+<meta property="article:tag" content="ARM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shumeipai.nxez.com/wp-content/uploads/2017/03/raspberrypi-version-compare-4b.png">
+
+<link rel="canonical" href="https://afgxf.github.io/2020/12/27/%E5%92%95%E5%92%95%E5%92%95%E7%9A%84RaspberryPI/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>咕咕咕的RaspberryPI(一):入门 | AFGXF's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="AFGXF's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AFGXF's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Geek with Hacking.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://afgxf.github.io/2020/12/27/%E5%92%95%E5%92%95%E5%92%95%E7%9A%84RaspberryPI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="AFGXF">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AFGXF's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          咕咕咕的RaspberryPI(一):入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-27 20:21:14 / 修改时间：20:59:01" itemprop="dateCreated datePublished" datetime="2020-12-27T20:21:14+08:00">2020-12-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h1><p>非常的对不起大家，最近咕得有点厉害，由于 <strong>CSP-J 100pts 历史重演</strong> 以及一些其他的考试/比赛/咕咕咕/买树莓派之类的行为，一直没照看Blog，非常抱歉！</p>
+<p>删除了一些SpaceVim的文章.对于这些文章,我认为SpaceVim把Vim&amp;Nvim变成了近似IDE/VSCode的存在.这是违背Vim&amp;Nvim设计初衷的.</p>
+<a id="more"></a>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="树莓派是什么？能吃吗？"><a href="#树莓派是什么？能吃吗？" class="headerlink" title="树莓派是什么？能吃吗？"></a>树莓派是什么？能吃吗？</h2><p><strong>注意，树莓派不能吃！！！</strong></p>
+<p>通俗来讲，树莓派是基于ARM的微型电脑，由英国的树莓派基金会开发。</p>
+<p><a target="_blank" rel="noopener" href="https://www.raspberrypi.org/">官方网站</a> <a target="_blank" rel="noopener" href="https://shumeipai.nxez.com/">树莓派实验室</a></p>
+<p><a target="_blank" rel="noopener" href="https://shumeipai.nxez.com/wp-content/uploads/2017/03/raspberrypi-version-compare-4b.png"><img src="https://shumeipai.nxez.com/wp-content/uploads/2017/03/raspberrypi-version-compare-4b.png" alt="选型指南"></a></p>
+<p><a target="_blank" rel="noopener" href="https://shumeipai.nxez.com/wp-content/uploads/2019/06/20190630222025426.jpg"><img src="https://shumeipai.nxez.com/wp-content/uploads/2019/06/20190630222025426.jpg" alt="外观"></a></p>
+<h2 id="选型指南"><a href="#选型指南" class="headerlink" title="选型指南"></a>选型指南</h2><p>树莓派型号有很多（如上图），型号的选择是个问题。</p>
+<p>下面以<a target="_blank" rel="noopener" href="https://www.dfrobot.com.cn/category-317-0-0-0-0-1-goods_id-DESC-1.html">DFRobot商城</a>为准.</p>
+<h3 id="按特性"><a href="#按特性" class="headerlink" title="按特性"></a>按特性</h3><p>先讨论一下几个型号的特性。</p>
+<h4 id="64Bit-Aarch64-amp-Aarch32"><a href="#64Bit-Aarch64-amp-Aarch32" class="headerlink" title="64Bit (Aarch64 &amp; Aarch32)"></a><strong>64Bit</strong> (Aarch64 &amp; Aarch32)</h4><ul>
+<li><strong>Computation Module 4 (CM4)</strong>(预售) <strong>注意:CM4这款型号主打工业化,不建议个人使用.</strong> 工业化明显.不推荐.CM3/CM1同上.</li>
+<li><strong>树莓派400</strong>(预售) 键盘与树莓派合一.</li>
+<li><strong>树莓派4B</strong> 最新架构,RAM高(1/2/4/8GB可选),强大的GPU</li>
+<li><strong>树莓派3B+</strong> 性能中肯,较稳定.</li>
+<li><strong>树莓派3A+</strong> 尺寸小,与3B+拥有同样强大的性能.<h4 id="32Bit"><a href="#32Bit" class="headerlink" title="32Bit"></a><strong>32Bit</strong></h4></li>
+<li><strong>树莓派 Zero/Zero W</strong> 这一代阉割了Ethernet,Zero W取而代之的是新型天线.Zero不可联网.性能稍弱.</li>
+</ul>
+<h3 id="按用途"><a href="#按用途" class="headerlink" title="按用途"></a>按用途</h3><ul>
+<li>个人服务器: 4B(1/2GB),3B+.</li>
+<li>性能需求强: 4B(4/8GB),CM系列.</li>
+<li>普通开发: 3A+/3B+/4B(1/2GB).</li>
+<li>体积: 3A+/Zero W.</li>
+</ul>
+<p>为什么没有Zero?</p>
+<p>因为它不能联网!</p>
+<h3 id="下期预告"><a href="#下期预告" class="headerlink" title="下期预告"></a>下期预告</h3><blockquote>
+<p>玩转树莓派4B!</p>
+<p>Coming Soon…</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AFGXF
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://afgxf.github.io/2020/12/27/%E5%92%95%E5%92%95%E5%92%95%E7%9A%84RaspberryPI/" title="咕咕咕的RaspberryPI(一):入门">https://afgxf.github.io/2020/12/27/咕咕咕的RaspberryPI/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+              <a href="/tags/Raspberry-PI/" rel="tag"><i class="fa fa-tag"></i> Raspberry PI</a>
+              <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag"><i class="fa fa-tag"></i> 树莓派</a>
+              <a href="/tags/ARM/" rel="tag"><i class="fa fa-tag"></i> ARM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/28/shell-data-verify/" rel="prev" title="Shell数据对拍">
+      <i class="fa fa-chevron-left"></i> Shell数据对拍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/31/2021-3-27%E7%94%9F%E7%89%A9%E7%AC%94%E8%AE%B0/" rel="next" title="2021.3.27生物笔记">
+      2021.3.27生物笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E8%83%BD%E5%90%83%E5%90%97%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">树莓派是什么？能吃吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E5%9E%8B%E6%8C%87%E5%8D%97"><span class="nav-number">2.2.</span> <span class="nav-text">选型指南</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E7%89%B9%E6%80%A7"><span class="nav-number">2.2.1.</span> <span class="nav-text">按特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#64Bit-Aarch64-amp-Aarch32"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">64Bit (Aarch64 &amp; Aarch32)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32Bit"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">32Bit</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E7%94%A8%E9%80%94"><span class="nav-number">2.2.2.</span> <span class="nav-text">按用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E6%9C%9F%E9%A2%84%E5%91%8A"><span class="nav-number">2.2.3.</span> <span class="nav-text">下期预告</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">AFGXF</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AFGXF" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;AFGXF" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.billy2007.tk/" title="https:&#x2F;&#x2F;www.billy2007.tk&#x2F;" rel="noopener" target="_blank">Billy2007&GoneTime</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://userunknown.gq/" title="https:&#x2F;&#x2F;userunknown.gq&#x2F;" rel="noopener" target="_blank">UserUnknownX</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yuygfgg.ml/" title="https:&#x2F;&#x2F;www.yuygfgg.ml&#x2F;" rel="noopener" target="_blank">yuygfgg</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://code004accepted.github.io/" title="https:&#x2F;&#x2F;code004accepted.github.io" rel="noopener" target="_blank">code004accepted</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://lkspacecom.wordpress.com/" title="https:&#x2F;&#x2F;lkspacecom.wordpress.com&#x2F;" rel="noopener" target="_blank">LK's Space</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-AFGXF"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AFGXF</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
